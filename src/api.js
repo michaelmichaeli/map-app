@@ -14,5 +14,7 @@ export const getData = () => {
         spatial.comment = ''
         return spatial
     })
-    return spatials
+    // setTimeout(() => {
+        return spatials
+    // }, 1000);
 }

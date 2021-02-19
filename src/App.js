@@ -1,15 +1,16 @@
-import './App.scss';
-import { getData } from './api'
-import SpatialList from './components/SpatialList';
+import "./App.scss";
+import SpatialList from "./components/SpatialList";
+
+import { SpatialProvider } from "./contexts/SpatialContext";
 
 function App() {
-  return (
-    <div className="App">
-      
-      <SpatialList data={getData()} />
-      
-    </div>
-  );
+	return (
+		<SpatialProvider>
+			<div className="App">
+				<SpatialList />
+			</div>
+		</SpatialProvider>
+	);
 }
 
 export default App;

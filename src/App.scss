@@ -1,5 +1,6 @@
-body {
-	overflow-x: hidden;
+html {
+	--scrollbarBG: #cfd8dc;
+	--thumbBG: #90a4ae;
 }
 
 .App {
@@ -8,44 +9,100 @@ body {
 	overflow: hidden;
 }
 
-.spatial-list-container {
-	border: 1px solid dimgray;
-	border-radius: 6px;
-	padding: 10px;
-	margin: 20px;
+.spatial-list-container::-webkit-scrollbar {
+	width: 9px;
 }
+.spatial-list-container::-webkit-scrollbar-track {
+	background: rgb(216, 216, 216);
+}
+.spatial-list-container::-webkit-scrollbar-thumb {
+	background-color: rgb(95, 95, 95);
+	border-radius: 8px;
+	border: 1px solid black;
+}
+.spatial-list-container {
+	scrollbar-width: thin;
+	scrollbar-color: rgb(95, 95, 95) rgb(216, 216, 216);
+	display: inline-block;
+	position: absolute;
+	max-height: 80vh;
+	overflow: scroll;
+	overflow-x: hidden;
+	border: 1px solid rgb(184, 184, 184);
+	border-radius: 6px;
+	padding: 0;
+	margin: 20px;
+	color: rgb(93, 93, 93);
 
-ul {
-	padding: 10px;
-	margin: 0;
+	h3 {
+		padding: 10px 10px 20px 10px;
+		margin: 0;
+		position: sticky;
+		top: 0px;
+		background-image: linear-gradient(white, white 80%, rgba(255, 255, 255, 0));
+		z-index: 999;
+	}
 
-	.spatial-row {
-		display: flex;
-		align-items: center;
-		color: dimgray;
+	ul {
+		padding: 0;
+		margin: 0;
 
-		& * {
-			margin: 2px 3px;
+		.spatial-row {
+			display: flex;
+			padding: 0 10px;
+			-webkit-transition: all 0.5s ease-out; 
+			-moz-transition: all 0.5s ease-out; 
+			-o-transition: all 0.5s ease-out; 
+			-ms-transition: all 0.5s ease-out; 
+			transition: all 0.5s ease-out; 
+			// transition-delay: 0.3s;
 		}
-  }
-  li {
-    p {
-      opacity: 0.6;
-      font-size: 0.7em;
-    }
-
-		.color-sample {
-			width: 15px;
-			height: 15px;
-			box-sizing: border-box;
-			border: 1px solid rgba(0, 0, 0, 0.13);
-			border-radius: 2px;
-			background-image: linear-gradient(
-				#ffffffad,
-				#0000001e 35%,
-				#0000001f 3%,
-				#ffffff4b
-			);
+		li {
+			cursor: pointer;
+			* {
+				margin: 2px 3px;
+			}
+			p {
+				opacity: 0.6;
+				font-size: 0.7em;
+			}
+			.color-sample {
+				width: 16px;
+				height: 16px;
+				box-sizing: border-box;
+				border: 1px solid rgba(0, 0, 0, 0.3);
+				border-radius: 2px;
+				background-image: linear-gradient(
+					#ffffffad,
+					#0000001e 35%,
+					#0000001f 3%,
+					#ffffff4b
+				);
+			}
+			h4 {
+				margin-top: 5px;
+			}
+			.open {
+				padding: 10px;
+				margin: 5px 10px 10px 12px;
+				border-left: 1px solid rgba(0, 0, 0, 0.3);
+				transition: all 0.5s ease-out; 
+			}
+		}
+		.spatial-row:hover {
+			background-color: rgba(0, 0, 0, 0.05);
 		}
 	}
+}
+
+
+// Helpers
+
+.flex-row {
+	display: flex;
+	flex-direction: row;
+}
+.flex-col {
+	display: flex;
+	flex-direction: column;
 }
