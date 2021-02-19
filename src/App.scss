@@ -1,0 +1,51 @@
+body {
+	overflow-x: hidden;
+}
+
+.App {
+	font-family: "Muli", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	overflow: hidden;
+}
+
+.spatial-list-container {
+	border: 1px solid dimgray;
+	border-radius: 6px;
+	padding: 10px;
+	margin: 20px;
+}
+
+ul {
+	padding: 10px;
+	margin: 0;
+
+	.spatial-row {
+		display: flex;
+		align-items: center;
+		color: dimgray;
+
+		& * {
+			margin: 2px 3px;
+		}
+  }
+  li {
+    p {
+      opacity: 0.6;
+      font-size: 0.7em;
+    }
+
+		.color-sample {
+			width: 15px;
+			height: 15px;
+			box-sizing: border-box;
+			border: 1px solid rgba(0, 0, 0, 0.13);
+			border-radius: 2px;
+			background-image: linear-gradient(
+				#ffffffad,
+				#0000001e 35%,
+				#0000001f 3%,
+				#ffffff4b
+			);
+		}
+	}
+}
