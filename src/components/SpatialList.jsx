@@ -7,7 +7,7 @@ import { SpatialContext } from './../contexts/SpatialContext'
 export default function SpatialList() {
 
     const [spatials, setSpatials] = useContext(SpatialContext)
-    console.log('data', spatials);
+    // console.log('data', spatials);
 
     return <div className="spatial-list-container">
         <h3>Spatials:</h3>
