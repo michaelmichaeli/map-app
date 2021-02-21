@@ -3,15 +3,17 @@ import { getData } from './../api'
 
 export const SpatialContext = createContext()
 
-export const SpatialProvider = props => {
+export const SpatialProvider = ({ children }) => {
 
     const data = getData()
 
     const [spatials, setSpatials] = useState(data)
 
+    const [activeSpatial, setActiveSpatial] = useState(null)
+
     return (
-        <SpatialContext.Provider value={[spatials, setSpatials]}>
-            { props.children }
+        <SpatialContext.Provider value={{ spatials, setSpatials, activeSpatial, setActiveSpatial }}>
+            { children }
         </SpatialContext.Provider>
     )
 }

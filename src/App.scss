@@ -55,9 +55,9 @@ html {
 
 	ul {
 		padding: 0;
-		margin: 0;
+		margin: 0 0 30px 0;
 
-		.spatial-row {
+		li.spatial-row {
 			// display: flex;
 			padding: 3px 10px;
 			-webkit-transition: all 0.5s ease-out;
@@ -66,8 +66,6 @@ html {
 			-ms-transition: all 0.5s ease-out;
 			transition: all 0.5s ease-out;
 			// transition-delay: 0.3s;
-		}
-		li {
 			padding-bottom: 3px;
 			cursor: pointer;
 			* {
@@ -96,16 +94,13 @@ html {
 						#ffffff4b
 					);
 				}
-				// h4 {
-					// margin-top: 5px;
-				// }
 			}
 			.row-content {
 				max-width: 200px;
 				padding: 10px 10px 20px 10px;
 				margin: 0 0 3px 12px;
 				border-left: 1px solid rgba(0, 0, 0, 0.3);
-				transition: all 0.5s ease-out;
+				transition: all 0.3s ease-out;
 			}
 		}
 		.spatial-row:hover {
@@ -113,6 +108,12 @@ html {
 		}
 	}
 }
+
+// Map-Edit-Tool
+.sr-only {
+    display: none;
+  }
+
 
 // Helpers
 
