@@ -2,7 +2,7 @@ import data from "./geoJSON.json";
 const randomColor = require("randomcolor");
 const cityseeker = require("city-seeker");
 
-export const getData = () => {
+export const getApiData = () => {
     data.features = data.features
         .slice(0, 10)
         .map((feature) => {

@@ -4,19 +4,13 @@ import { EditControl } from 'react-leaflet-draw'
 import L from 'leaflet';
 
 import { SpatialContext } from '../contexts/SpatialContext'
+import { ActiveSpatialContext } from '../contexts/ActiveSpatialContext'
 
 export default function ViaMap(props) {
 	const FGref = React.useRef();
 
-	useEffect(() => {
-		FGref.current && _onFeatureGroupReady(FGref.current);
-		setTimeout(() => {
-			_onFeatureGroupReady(FGref.current)
-		}, 100);
-	}, [FGref.current])
-
-
-	const { spatials, setSpatials, setActiveSpatial, activeSpatial } = useContext(SpatialContext)
+	const { spatials, setSpatials } = useContext(SpatialContext)
+	const { setActiveSpatial, activeSpatial } = useContext(ActiveSpatialContext)
 
 	const _onEdited = (e) => {
 		let numEdited = 0;
@@ -53,7 +47,6 @@ export default function ViaMap(props) {
 	};
 
 	const _onMounted = (drawControl) => {
-		console.log(spatials);
 		console.log('_onMounted', drawControl);
 	};
 
@@ -75,32 +68,33 @@ export default function ViaMap(props) {
 
 	let _editableFG = null;
 
+	// const leafletGeoJSON = new L.GeoJSON(spatials);
+
 	const _onFeatureGroupReady = (reactFGref) => {
 		// populate the leaflet FeatureGroup with the geoJson layers
-		console.log('!!! FEATUREGROUP ready !!!')
+
 		let leafletGeoJSON = new L.GeoJSON(spatials, {
 			style: feature => {
 				// console.log('feature: ', feature)
 				return ({
 					fillColor: feature.color,
-					fillOpacity: 0.5,
+					fillOpacity: 0.8,
 					// opacity: 0,
 					stroke: false
 				})
 			}
 		}
 		);
-		console.log(leafletGeoJSON);
 
 		let leafletFG = reactFGref;
 
 		leafletGeoJSON.eachLayer((layer) => {
 			layer.on({
 				click: () => {
-					console.log('clicked', layer)
+					console.log('clicked on map layer:', layer)
 					layer.options.color = "black"
-					layer.options.fillOpacity = 1
 					layer.options.opacity = 1
+					layer.options.fillOpacity = 1
 					setActiveSpatial(layer.feature.id)
 				},
 				// mouseover: () => {
@@ -116,8 +110,16 @@ export default function ViaMap(props) {
 		_editableFG = reactFGref;
 	};
 
-	let leafletGeoJSON = new L.GeoJSON(spatials);
-	// console.log(leafletGeoJSON);
+	useEffect(() => {
+		setTimeout(() => {
+			_onFeatureGroupReady(FGref.current)
+		}, 0);
+	}, [])
+	// useEffect(() => {
+	// 	setTimeout(() => {
+	// 		_onFeatureGroupReady(FGref.current)
+	// 	}, 0);
+	// }, [])
 
 	// const _onChange = () => {
 	// 	// this._editableFG contains the edited geometry, which can be manipulated through the leaflet API
@@ -150,7 +152,14 @@ export default function ViaMap(props) {
 			>
 				<EditControl
 					position="topright"
-					onEdited={_onEdited}
+					onEdited={e => {
+						e.layers.eachLayer(a => {
+							this.props.updatePlot({
+								// id: id,
+								feature: a.toGeoJSON()
+							});
+						});
+					}}
 					onCreated={_onCreated}
 					onDeleted={_onDeleted}
 					onMounted={_onMounted}
@@ -159,28 +168,7 @@ export default function ViaMap(props) {
 					onDeleteStart={_onDeleteStart}
 					onDeleteStop={_onDeleteStop}
 				/>
-
-				{/* {/* {spatials.map(spatial => {
-
-					const isActive = activeSpatial === spatial.id ? 0.9 : 0 */}
-
-				{/* // return <Polygon */}
-				{/* // 	key={spatial.id} */}
-				{/* // 	positions={spatial.coordinates} */}
-				{/* // 	pathOptions={{ color: spatial.color, fillColor: spatial.color, fillOpacity: 1 }} */}
-				{/* // 	opacity={isActive} */}
-				{/* // 	eventHandlers={{ */}
-				{/* // 		click: () => { */}
-				{/* // 			console.log('active id', spatial.id); */}
-				{/* // 			setActiveSpatial(spatial.id) */}
-				{/* // 			console.log('activeSpatial', activeSpatial); */}
-				{/* // 		} */}
-				{/* // 	}} */}
-				{/* // > */}
-				{/* // </Polygon> */}
-				{/* // })} */}
 			</FeatureGroup>
-
 		</Map>
 	);
 }

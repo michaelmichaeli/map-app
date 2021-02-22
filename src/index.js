@@ -4,9 +4,17 @@ import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import { SpatialProvider } from "./contexts/SpatialContext";
+import { ActiveSpatialProvider } from "./contexts/ActiveSpatialContext";
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <SpatialProvider>
+				<ActiveSpatialProvider>
+          <App />
+				</ActiveSpatialProvider>
+			</SpatialProvider>
+    
   </React.StrictMode>,
   document.getElementById('root')
 );
