@@ -9,6 +9,7 @@
     "city-seeker": "^1.0.0",
     "leaflet": "^1.6.0",
     "leaflet-draw": "^1.0.4",
+    "moment": "^2.29.1",
     "node-sass": "^5.0.0",
     "randomcolor": "^0.6.2",
     "react": "^17.0.1",
