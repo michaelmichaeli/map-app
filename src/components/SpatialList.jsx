@@ -17,7 +17,6 @@ export default function SpatialList() {
         <div className="list-header flex-row flex-space-between">
             <h3>Spatials:</h3>
             {activeSpatialID && <a
-                href="/#"
                 className="done"
                 title="Done"
                 onClick={() => setActiveSpatialID(null)

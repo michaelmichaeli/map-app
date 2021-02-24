@@ -56,7 +56,6 @@ export default function SpatialRow({ spatial }) {
                 <SpatialColorPicker spatial={spatial} className="color-picker" />
                 <SpatialNameInput spatial={spatial} />
                 <a
-                    href="/#"
                     className="delete"
                     title="Remove Forever"
                     onClick={() => {
