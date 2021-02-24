@@ -23,7 +23,7 @@ export const SpatialProvider = ({ children }) => {
 			);
 			data = data.data;
 			data.features = data.features
-				.splice(0, 200) // TODO: optimize big-data fetching, memoizing, lazy-loading, infinite-loading...
+				.splice(0, 200) // TODO optimize big-data: fetching, memoizing, lazy-loading, infinite-loading...
 				.map((feature) => {
 					feature.name = cityseeker.any().city.name;
 					feature.color = randomColor();
@@ -75,7 +75,9 @@ export const SpatialProvider = ({ children }) => {
 
 			newSpatials.features.push(newSpatial);
 			setSpatials(newSpatials);
-			setActiveSpatialID(newSpatial.id);
+			setTimeout(() => {
+				setActiveSpatialID(newSpatial.id);
+			}, 0);
 		};
 
 		const updateSpatial = () => {
