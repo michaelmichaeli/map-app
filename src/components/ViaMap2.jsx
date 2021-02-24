@@ -41,6 +41,9 @@ function EditableLayer(props) {
             const changedLayerGeoJson = l.toGeoJSON();
             const { layer } = props;
             if (changedLayerGeoJson.id === layer.feature.id) {
+                // console.log('changedLayerGeoJson area', L.GeometryUtil.geodesicArea(l.getLatLngs()[0]));
+                console.log(changedLayerGeoJson);
+                changedLayerGeoJson.properties.Shape__Area = L.GeometryUtil.geodesicArea(l.getLatLngs()[0])
                 saveSpatial(changedLayerGeoJson)
                 setAlertEdit(true)
             }
@@ -68,7 +71,9 @@ function EditableLayer(props) {
                     }}
                     {...props}
                 />
-                <Tooltip sticky>{props.layer.feature.name}</Tooltip>
+                <Tooltip sticky><h3>{props.layer.feature.name}</h3>
+                    <p>Shape Area: {props.layer.feature.properties.Shape__Area}</p>
+                </Tooltip>
             </FeatureGroup>
         </div>
     );
@@ -96,7 +101,9 @@ function AddLayer(props) {
     }
 
     const onCreated = e => {
-        saveSpatial(e.layer.toGeoJSON())
+        const newSpatial = e.layer.toGeoJSON()
+        newSpatial.properties.Shape__Area = L.GeometryUtil.geodesicArea(e.layer.getLatLngs()[0])
+        saveSpatial(newSpatial)
         setAlertCreate(true)
     }
 
@@ -160,7 +167,6 @@ function EditableGroup({ data }) {
                             setActiveSpatialID(editLayerId)
                         }}
                     >
-                        
                     </EditableLayer >
                 );
             })}
@@ -185,12 +191,15 @@ export default function ViaMap2(props) {
             />
             <EditableGroup data={spatials} />
         </Map >)
-        : (<Loader
-            className="loader"
-            type="Circles"
-            color="#00BFFF"
-            height={200}
-            width={200}
-            timeout={3000} //3 secs
-        />)
+        : (<div className="loader-container">
+            <Loader
+                className="loader"
+                type="Circles"
+                color="#00BFFF"
+                height={200}
+                width={200}
+                timeout={30000} //30 secs
+            />
+        </div>
+        )
 }

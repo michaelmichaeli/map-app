@@ -37,17 +37,14 @@ export default function SpatialRow({ spatial }) {
         </div>
         {spatial.id === activeSpatialID && <div className="row-content">
             <div className="info">
-                <p className="creation-date">Created:
+                <p className="creation-date">Created: 
                     <span>{moment(spatial.creationDate).fromNow()} on {moment(spatial.creationDate).format("dddd, MMMM Do YYYY, h:mm:ss a")}</span>
                 </p>
-                <p className="ElectDist">ElectDist:
+                <p className="ElectDist">Electoral District: 
                     <span>{spatial.properties.ElectDist ? spatial.properties.ElectDist : "No Dist"}</span>
                 </p>
-                <p className="shape-area">shape-area:
-                    <span>{spatial.properties.Shape__Area ? spatial.properties.Shape__Area : "No Shape Area"}</span>
-                </p>
-                <p className="shape-length">shape-length:
-                    <span>{spatial.properties.Shape__Length ? spatial.properties.Shape__Length : "No Shape length"}</span>
+                <p className="shape-area">Area: 
+                    <span>{spatial.properties.Shape__Area ? spatial.properties.Shape__Area : "No Shape Area"}<span>Sq m</span></span>
                 </p>
                 <p className="comment-title">Comment: </p>
                 <SpatialComment spatial={spatial} />

@@ -2,14 +2,11 @@ html {
 	--scrollbarBG: #cfd8dc;
 	--thumbBG: #90a4ae;
 }
-.loader {
-	margin: 0;
-	// height: 90vh;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	-ms-transform: translateY(-50%);
-	transform: translateY(-50%);
+.loader-container {
+	height: 90vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .App {
@@ -87,15 +84,11 @@ html {
 		margin: 0 0 10px 0;
 
 		li.spatial-row {
-			// display: flex;
-			// padding: 7px 10px 7px 3px;
-			// padding-bottom: 3px;
 			-webkit-transition: all 0.3s ease-out;
 			-moz-transition: all 0.3s ease-out;
 			-o-transition: all 0.3s ease-out;
 			-ms-transition: all 0.3s ease-out;
 			transition: all 0.3s ease-out;
-			// transition-delay: 0.3s;
 			* {
 				margin: auto 3px;
 			}
@@ -115,14 +108,7 @@ html {
 					width: 24px;
 					height: 24px;
 					box-sizing: border-box;
-					// border: 1px solid rgba(0, 0, 0, 0.3);
 					border-radius: 4px;
-					// background-image: linear-gradient(
-					// 	#ffffffad,
-					// 	#0000001e 35%,
-					// 	#0000001f 3%,
-					// 	#ffffff4b
-					// );
 				}
 			}
 			.row-content {
@@ -136,6 +122,8 @@ html {
 					font-size: 0.7em;
 					font-weight: bold;
 					span {
+						margin-left: 5px;
+						display: inline;
 						font-weight: normal;
 					}
 				}
@@ -160,6 +148,7 @@ html {
 					}
 					input {
 						margin: 0;
+						font-size: 0.7em;
 					}
 					svg {
 						margin: 3px;
@@ -206,4 +195,13 @@ html {
 .flex-space-between {
 	display: flex;
 	justify-content: space-between;
+}
+
+// responsiveness
+
+@media (max-width: 600px) {
+	.spatial-list-container {
+		max-height: 40vh;
+		min-width: 95vw;
+	}
 }
