@@ -1,20 +1,20 @@
 import { useContext } from "react";
 import "./App.scss";
 import SpatialList from "./components/SpatialList";
-import ViaMap from "./components/ViaMap";
 import ViaMap2 from "./components/ViaMap2";
-// import MapEditTool from "./components/MapEditTool";
+
 import { SpatialContext } from "./contexts/SpatialContext";
+import UserMessages from "./components/UserMessages";
 
 function App() {
 	const { spatials } = useContext(SpatialContext);
-	return spatials ? (
+	return (
 		<div className="App">
-			{/* <ViaMap /> */}
+			<UserMessages />
 			<ViaMap2 />
-			<SpatialList />
+			{spatials && <SpatialList />}
 		</div>
-	) : null; // TODO: Loader
+	);
 }
 
 export default App;

@@ -1,32 +1,31 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { Map, TileLayer, FeatureGroup, useLeaflet, Tooltip } from "react-leaflet";
 import { EditControl } from "react-leaflet-draw";
 import L from "leaflet";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import Loader from "react-loader-spinner";
 
 import { SpatialContext } from '../contexts/SpatialContext'
 import { ActiveSpatialContext } from '../contexts/ActiveSpatialContext'
+import { UserMessageContext } from "../contexts/UserMessageContext";
 
 
 function EditableLayer(props) {
-    const { spatials, setSpatials, saveSpatial, deleteSpatialByID } = useContext(SpatialContext)
-    const { activeSpatialID, setActiveSpatialID } = useContext(ActiveSpatialContext)
+    const { spatials, saveSpatial } = useContext(SpatialContext)
+    const { setAlertEdit } = useContext(UserMessageContext)
 
     const leaflet = useLeaflet();
     const editLayerRef = React.useRef();
     let drawControlRef = React.useRef();
-    // const geoJsonRef = React.useRef();
     let { map } = leaflet;
 
     useEffect(() => {
-
         if (!props.showDrawControl) {
             map.removeControl(drawControlRef.current);
         } else {
             map.addControl(drawControlRef.current);
         }
-
         editLayerRef.current.leafletElement.clearLayers();
-
         editLayerRef.current.leafletElement.addLayer(props.layer);
         props.layer.on("click", function (e) {
             props.onLayerClicked(e, drawControlRef.current);
@@ -41,26 +40,13 @@ function EditableLayer(props) {
         e.layers.eachLayer(l => {
             const changedLayerGeoJson = l.toGeoJSON();
             const { layer } = props;
-
             if (changedLayerGeoJson.id === layer.feature.id) {
-
-                console.log('changedLayer: ', changedLayerGeoJson);
-                console.log('currentLayer: ', layer.feature)
                 saveSpatial(changedLayerGeoJson)
+                setAlertEdit(true)
             }
         })
     }
 
-    const onDeleted = e => {
-        // console.log('layers',e.layers.toGeoJSON().features[0].id);
-        const deletedLayerGeoJson = e.layers.toGeoJSON().features[0];
-        deleteSpatialByID(deletedLayerGeoJson.id)
-        // deleteSpatialByID(activeSpatialID)
-        // console.log('id after deletion: ', deletedLayerGeoJson.id)
-    }
-
-    // geoJsonRef.current = geoJsonRef.current ? geoJsonRef.current + 1 : 1;
-    // console.log('editableLayer ', geoJsonRef.current);
     return (
         <div>
             <FeatureGroup ref={editLayerRef}>
@@ -68,7 +54,6 @@ function EditableLayer(props) {
                     position="topright"
                     onMounted={onMounted}
                     onEdited={onEdited}
-                    onDeleted={onDeleted}
                     edit={{
                         remove: false,
                         edit: true
@@ -83,29 +68,28 @@ function EditableLayer(props) {
                     }}
                     {...props}
                 />
+                <Tooltip sticky>{props.layer.feature.name}</Tooltip>
             </FeatureGroup>
         </div>
     );
 }
 
 function AddLayer(props) {
-    const { spatials, setSpatials, saveSpatial } = useContext(SpatialContext)
-    const { activeSpatialID, setActiveSpatialID } = useContext(ActiveSpatialContext)
+    const { saveSpatial } = useContext(SpatialContext)
+    const { activeSpatialID } = useContext(ActiveSpatialContext)
+    const { setAlertCreate } = useContext(UserMessageContext)
 
     const leaflet = useLeaflet();
-    const editLayerRef = React.useRef();
     let drawControlRef = React.useRef();
     let { map } = leaflet;
 
     useEffect(() => {
-
         if (activeSpatialID) {
             map.removeControl(drawControlRef.current);
         } else {
             map.addControl(drawControlRef.current);
         }
-
-    }, [props, map]);
+    }, [props, map, activeSpatialID]);
 
     const onMounted = (ctl) => {
         drawControlRef.current = ctl;
@@ -113,15 +97,15 @@ function AddLayer(props) {
 
     const onCreated = e => {
         saveSpatial(e.layer.toGeoJSON())
+        setAlertCreate(true)
     }
 
     return (
         <div>
-            <FeatureGroup ref={editLayerRef}>
+            <FeatureGroup>
                 <EditControl
                     position="topright"
                     onMounted={onMounted}
-                    // onEdited={onEdited}
                     onCreated={onCreated}
                     edit={{
                         remove: false,
@@ -131,7 +115,7 @@ function AddLayer(props) {
                         marker: false,
                         circle: false,
                         rectangle: false,
-                        polygon: !activeSpatialID,
+                        polygon: true,
                         polyline: false,
                         circlemarker: false
                     }}
@@ -150,7 +134,6 @@ function EditableGroup({ data }) {
             return ({
                 fillColor: feature.color,
                 fillOpacity: activeSpatialID === feature.id ? 1 : 0.4,
-                // stroke: activeSpatialID === feature.id,
                 color: "black",
                 opacity: activeSpatialID === feature.id ? 1 : 0.2
             })
@@ -177,6 +160,7 @@ function EditableGroup({ data }) {
                             setActiveSpatialID(editLayerId)
                         }}
                     >
+                        
                     </EditableLayer >
                 );
             })}
@@ -185,22 +169,28 @@ function EditableGroup({ data }) {
     );
 }
 
-function ViaMap2(props) {
-    const { spatials, setSpatials } = useContext(SpatialContext)
-    const { setActiveSpatial, activeSpatial } = useContext(ActiveSpatialContext)
+export default function ViaMap2(props) {
+    const { spatials } = useContext(SpatialContext)
+
+    const center = [40.64564461264746, -73.84831527895031]
 
     return spatials ?
         (<Map
-            center={[spatials.features[0].geometry.coordinates[0][0][1], spatials.features[0].geometry.coordinates[0][0][0]]}
-            zoom={13}>
+            center={center}
+            // center={[spatials.features[0].geometry.coordinates[0][0][1], spatials.features[0].geometry.coordinates[0][0][0]]}
+            zoom={12}>
             < TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             />
             <EditableGroup data={spatials} />
-            <div>kkk</div>
         </Map >)
-        : null; // TODO: Loader
+        : (<Loader
+            className="loader"
+            type="Circles"
+            color="#00BFFF"
+            height={200}
+            width={200}
+            timeout={3000} //3 secs
+        />)
 }
-
-export default ViaMap2;

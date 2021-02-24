@@ -3,12 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.57",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "axios": "^0.21.1",
     "city-seeker": "^1.0.0",
     "leaflet": "^1.6.0",
     "leaflet-draw": "^1.0.4",
+    "material-ui-color": "^0.4.10",
     "moment": "^2.29.1",
     "node-sass": "^5.0.0",
     "randomcolor": "^0.6.2",
@@ -16,7 +21,9 @@
     "react-dom": "^17.0.1",
     "react-leaflet": "^2.7.0",
     "react-leaflet-draw": "^0.19.0",
+    "react-loader-spinner": "^4.0.0",
     "react-scripts": "4.0.2",
+    "styled-components": "^5.2.1",
     "web-vitals": "^1.0.1"
   },
   "scripts": {

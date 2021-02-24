@@ -6,12 +6,15 @@ import reportWebVitals from "./reportWebVitals";
 
 import { SpatialProvider } from "./contexts/SpatialContext";
 import { ActiveSpatialProvider } from "./contexts/ActiveSpatialContext";
+import { UserMessageProvider } from "./contexts/UserMessageContext";
 
 ReactDOM.render(
 	<React.StrictMode>
 		<ActiveSpatialProvider>
 			<SpatialProvider>
-				<App />
+				<UserMessageProvider>
+					<App />
+				</UserMessageProvider>
 			</SpatialProvider>
 		</ActiveSpatialProvider>
 	</React.StrictMode>,

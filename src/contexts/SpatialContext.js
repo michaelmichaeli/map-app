@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { getApiData } from "./../api"; //TODO: fetch from real API
+import { getApiData } from "./../api"; //when not fetching from real API
 import { ActiveSpatialContext } from "./ActiveSpatialContext";
+import axios from "axios";
 
 const randomColor = require("randomcolor");
 const cityseeker = require("city-seeker");
@@ -15,20 +16,37 @@ export const SpatialProvider = ({ children }) => {
 	const [spatials, setSpatials] = useState(null);
 
 	useEffect(() => {
-		const asyncFunc = async () => {
-			const data = await getApiData();
-			data.features = data.features.map((feature) => {
-				feature.name = cityseeker.any().city.name;
-				feature.color = randomColor({ luminosity: "light" });
-				feature.creationDate = Date.now();
-				feature.comment =
-					"Lorem ipsum dolor sit, amet consectetur adipisicing elit. asperiores, pariatur nihil quod commodi? Necessitatibus, amet? Fuga facere, aspernatur odio asperiores molestiae enim rerum maxime expedita repellat cumque sequi corporis sapiente officiis accusantium!";
-				return feature;
-			});
+		const fetchData = async () => {
+			// const data = await getApiData(); //when not fetching from real API
+			let data = await axios.get(
+				"https://services5.arcgis.com/GfwWNkhOj9bNBqoJ/arcgis/rest/services/NYC_Election_Districts_Water_Included/FeatureServer/0/query?where=1=1&outFields=*&outSR=4326&f=pgeojson"
+			);
+			data = data.data;
+			data.features = data.features
+				.splice(0, 200) // TODO: optimize big-data fetching, memoizing, lazy-loading, infinite-loading...
+				.map((feature) => {
+					feature.name = cityseeker.any().city.name;
+					feature.color = randomColor();
+					feature.creationDate = Date.now();
+					feature.comment =
+						"Lorem ipsum dolor sit, amet consectetur adipisicing elit. asperiores, pariatur nihil quod commodi? Necessitatibus, amet?";
+					return feature;
+				});
 			setSpatials(data);
 		};
-		asyncFunc();
+		fetchData();
 	}, []);
+
+	const getActiveSpatialCoords = () => {
+		const spatialIndex = spatials.features.findIndex(
+			(currSpatial) => currSpatial.id === activeSpatialID
+		);
+		console.log(spatials.features[spatialIndex].geometry.coordinates[0][0]);
+		return [
+			spatials.features[spatialIndex].geometry.coordinates[0][0][1],
+			spatials.features[spatialIndex].geometry.coordinates[0][0][1],
+		];
+	};
 
 	const deleteSpatialByID = (spatialID) => {
 		const spatialIndex = spatials.features.findIndex(
@@ -36,12 +54,6 @@ export const SpatialProvider = ({ children }) => {
 		);
 		const newSpatials = { ...spatials };
 		newSpatials.features.splice(spatialIndex, 1);
-
-		// console.log("deleted id:", spatialID);
-		// console.log(
-		// 	"spatials after deletion left with:",
-		// 	newSpatials.features.length
-		// );
 
 		setSpatials(newSpatials);
 		setActiveSpatialID(null);
@@ -51,7 +63,11 @@ export const SpatialProvider = ({ children }) => {
 		const addNewSpatial = () => {
 			const newSpatial = spatial;
 			const newSpatials = { ...spatials };
-			newSpatial.id = spatials.features[spatials.features.length - 1].id + 1; // TODO: NEW UNIQUE ID
+			if (spatials.length !== 0) {
+				newSpatial.id = spatials.features[spatials.features.length - 1].id + 1; // TODO: NEW UNIQUE ID
+			} else {
+				newSpatial.id = 1; // TODO: NEW UNIQUE ID
+			}
 			newSpatial.name = "New " + cityseeker.any().city.name;
 			newSpatial.color = randomColor({ luminosity: "light" });
 			newSpatial.creationDate = Date.now();
@@ -59,7 +75,6 @@ export const SpatialProvider = ({ children }) => {
 
 			newSpatials.features.push(newSpatial);
 			setSpatials(newSpatials);
-			// console.log(spatials);
 			setActiveSpatialID(newSpatial.id);
 		};
 
@@ -77,14 +92,17 @@ export const SpatialProvider = ({ children }) => {
 		else {
 			updateSpatial();
 		}
-		// console.log("spatial saved:", spatial);
-		// console.log("all spatials:", spatials.features);
 	};
 
 	return (
 		<SpatialContext.Provider
-			// value={{ spatials, setSpatials, saveSpatial }}
-			value={{ spatials, setSpatials, saveSpatial, deleteSpatialByID }}
+			value={{
+				spatials,
+				setSpatials,
+				saveSpatial,
+				deleteSpatialByID,
+				getActiveSpatialCoords,
+			}}
 		>
 			{children}
 		</SpatialContext.Provider>

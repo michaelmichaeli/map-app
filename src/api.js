@@ -1,11 +1,10 @@
 import data from "./geoJSON.json";
 
 export const getApiData = () => {
-    data.features = data.features
+        data.features = data.features
         .slice(0, 10)
-	return data;
+        return data;
 };
-
 
 
 /*
