@@ -27,11 +27,8 @@ export default function SpatialList() {
             const node = document.getElementById(activeSpatialID)
             scrollIntoViewSmoothly(node, {
                 behavior: 'smooth',
-                // scrollMode: 'if-needed',
                 block: 'center',
-                // inline: 'nearest',
             })
-            // node.scrollIntoView({ behavior: "smooth", block: "center" })
         }
     }, [activeSpatialID])
 
