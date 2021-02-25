@@ -145,7 +145,6 @@ function EditableGroup({ data }) {
                 opacity: activeSpatialID === feature.id ? 1 : 0.2
             })
         },
-        tooltip: feature => (feature.name)
     });
     const layers = [];
     let i = 1;

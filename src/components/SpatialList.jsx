@@ -1,9 +1,12 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import SpatialRow from './SpatialRow'
 import Icon from '@material-ui/core/Icon';
 
 import { SpatialContext } from './../contexts/SpatialContext'
 import { ActiveSpatialContext } from '../contexts/ActiveSpatialContext';
+
+import scrollIntoView from 'scroll-into-view-if-needed'
+import smoothScrollIntoView from 'smooth-scroll-into-view-if-needed'
 
 
 export default function SpatialList() {
@@ -12,6 +15,25 @@ export default function SpatialList() {
     const { activeSpatialID, setActiveSpatialID } = useContext(
         ActiveSpatialContext
     );
+
+    useEffect(() => {
+        console.log('activeSpatialID', activeSpatialID);
+        if (activeSpatialID) {
+            const scrollIntoViewSmoothly = 
+                'scrollBehavior' in document.documentElement.style
+                    ? smoothScrollIntoView
+                    : scrollIntoView
+                
+            const node = document.getElementById(activeSpatialID)
+            scrollIntoViewSmoothly(node, {
+                behavior: 'smooth',
+                // scrollMode: 'if-needed',
+                block: 'center',
+                // inline: 'nearest',
+            })
+            // node.scrollIntoView({ behavior: "smooth", block: "center" })
+        }
+    }, [activeSpatialID])
 
     return spatials ? (<div className="spatial-list-container">
         <div className="list-header flex-row flex-space-between">

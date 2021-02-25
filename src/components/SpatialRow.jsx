@@ -14,8 +14,12 @@ export default function SpatialRow({ spatial }) {
     const { activeSpatialID, setActiveSpatialID } = useContext(ActiveSpatialContext)
     const { deleteSpatialByID } = useContext(SpatialContext)
     const { setAlertDelete } = useContext(UserMessageContext)
+    
+    
+   
 
-    return <li className={"spatial-row flex-col"}>
+    return <li className={"spatial-row flex-col"} id={spatial.id}
+    >
         <div
             className="row-header flex-row"
             onClick={() => {
