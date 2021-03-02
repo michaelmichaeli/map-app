@@ -46,8 +46,16 @@ export default function UserMessages() {
                     Spatial was deleted succssfully
                 </MuiAlert>
             </Snackbar>
-            <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }} open={alertCreate} autoHideDuration={6000} onClose={() => setAlertCreate(false)}>
-                <MuiAlert onClose={() => setAlertCreate(false)} severity="success" elevation={6} variant="filled" >
+            <Snackbar
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                open={alertCreate}
+                autoHideDuration={6000}
+                onClose={() => setAlertCreate(false)}>
+                <MuiAlert
+                    onClose={() => setAlertCreate(false)}
+                    severity="success"
+                    elevation={6}
+                    variant="filled" >
                     Spatial created successfully
                 </MuiAlert>
             </Snackbar>

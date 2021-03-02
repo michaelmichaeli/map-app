@@ -9,7 +9,7 @@ const cityseeker = require("city-seeker");
 export const SpatialContext = createContext();
 
 export const SpatialProvider = ({ children }) => {
-	const { activeSpatialID, setActiveSpatialID } = useContext(
+	const { setActiveSpatialID } = useContext(
 		ActiveSpatialContext
 	);
 
@@ -23,7 +23,7 @@ export const SpatialProvider = ({ children }) => {
 			);
 			data = data.data;
 			data.features = data.features
-				.splice(0, 200) // TODO optimize big-data: fetching, memoizing, lazy-loading, infinite-loading...
+				.splice(0, 590) // TODO optimize big-data: fetching, memoizing, lazy-loading, infinite-loading...
 				.map((feature) => {
 					feature.name = cityseeker.any().city.name;
 					feature.color = randomColor();
@@ -36,17 +36,6 @@ export const SpatialProvider = ({ children }) => {
 		};
 		fetchData();
 	}, []);
-
-	const getActiveSpatialCoords = () => {
-		const spatialIndex = spatials.features.findIndex(
-			(currSpatial) => currSpatial.id === activeSpatialID
-		);
-		console.log(spatials.features[spatialIndex].geometry.coordinates[0][0]);
-		return [
-			spatials.features[spatialIndex].geometry.coordinates[0][0][1],
-			spatials.features[spatialIndex].geometry.coordinates[0][0][1],
-		];
-	};
 
 	const deleteSpatialByID = (spatialID) => {
 		const spatialIndex = spatials.features.findIndex(
@@ -103,7 +92,6 @@ export const SpatialProvider = ({ children }) => {
 				setSpatials,
 				saveSpatial,
 				deleteSpatialByID,
-				getActiveSpatialCoords,
 			}}
 		>
 			{children}

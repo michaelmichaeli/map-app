@@ -1,13 +1,16 @@
-import React from 'react';
-import { SpatialContext } from './SpatialContext';
-import { ActiveSpatialContext } from './ActiveSpatialContext';
+import React from "react";
+import { SpatialContext } from "./SpatialContext";
+import { ActiveSpatialContext } from "./ActiveSpatialContext";
+import { UserMessageContext } from "./UserMessageContext";
 
 export const CentralContextProvider = ({ children }) => {
-    return (
-        <SpatialContext>
-            <ActiveSpatialContext>
-                {children}
-            </ActiveSpatialContext>
-        </SpatialContext>
-    )
-}
+	return (
+		<ActiveSpatialContext>
+			<SpatialContext>
+                <UserMessageContext>
+                    {children}
+                </UserMessageContext>
+			</SpatialContext>
+		</ActiveSpatialContext>
+	);
+};

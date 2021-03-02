@@ -10,6 +10,73 @@ import { ActiveSpatialContext } from '../contexts/ActiveSpatialContext'
 import { UserMessageContext } from "../contexts/UserMessageContext";
 
 
+export default function ViaMap() {
+    const { spatials } = useContext(SpatialContext)
+
+    const center = [40.64564461264746, -73.84831527895031]
+
+    return spatials
+        ? (<Map
+            center={center}
+            zoom={12}>
+            < TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            />
+            <EditableGroup data={spatials} />
+        </Map >)
+        : (<div className="loader-container">
+            <Loader
+                className="loader"
+                type="Circles"
+                color="#00BFFF"
+                height={200}
+                width={200}
+                timeout={30000} //30 secs
+            />
+        </div>
+        )
+}
+
+function EditableGroup({ data }) {
+    const { activeSpatialID, setActiveSpatialID } = useContext(ActiveSpatialContext)
+
+    const dataLayer = new L.GeoJSON(data, {
+        style: feature => {
+            return ({
+                fillColor: feature.color,
+                fillOpacity: activeSpatialID === feature.id ? 1 : 0.4,
+                color: "black",
+                opacity: activeSpatialID === feature.id ? 1 : 0.2
+            })
+        },
+    });
+    const layers = [];
+    dataLayer.eachLayer((layer) => {
+        layers.push(layer);
+    });
+
+    return (
+        <div>
+            {layers.map((layer, i) => {
+                const { id } = layer.feature;
+                return (
+                    <EditableLayer
+                        key={i}
+                        layer={layer}
+                        showDrawControl={id === activeSpatialID}
+                        onLayerClicked={() => {
+                            setActiveSpatialID(id)
+                        }}
+                    >
+                    </EditableLayer >
+                );
+            })}
+            <AddLayer />
+        </div>
+    );
+}
+
 function EditableLayer(props) {
     const { spatials, saveSpatial } = useContext(SpatialContext)
     const { setAlertEdit } = useContext(UserMessageContext)
@@ -41,8 +108,6 @@ function EditableLayer(props) {
             const changedLayerGeoJson = l.toGeoJSON();
             const { layer } = props;
             if (changedLayerGeoJson.id === layer.feature.id) {
-                // console.log('changedLayerGeoJson area', L.GeometryUtil.geodesicArea(l.getLatLngs()[0]));
-                console.log(changedLayerGeoJson);
                 changedLayerGeoJson.properties.Shape__Area = L.GeometryUtil.geodesicArea(l.getLatLngs()[0])
                 saveSpatial(changedLayerGeoJson)
                 setAlertEdit(true)
@@ -72,7 +137,7 @@ function EditableLayer(props) {
                     {...props}
                 />
                 <Tooltip sticky><h3>{props.layer.feature.name}</h3>
-                    <p>Shape Area: {props.layer.feature.properties.Shape__Area}</p>
+                    <p>{Math.floor(props.layer.feature.properties.Shape__Area) + " sq m"}</p>
                 </Tooltip>
             </FeatureGroup>
         </div>
@@ -131,74 +196,4 @@ function AddLayer(props) {
             </FeatureGroup>
         </div>
     );
-}
-
-function EditableGroup({ data }) {
-    const { activeSpatialID, setActiveSpatialID } = useContext(ActiveSpatialContext)
-
-    const dataLayer = new L.GeoJSON(data, {
-        style: feature => {
-            return ({
-                fillColor: feature.color,
-                fillOpacity: activeSpatialID === feature.id ? 1 : 0.4,
-                color: "black",
-                opacity: activeSpatialID === feature.id ? 1 : 0.2
-            })
-        },
-    });
-    const layers = [];
-    let i = 1;
-    dataLayer.eachLayer((layer) => {
-        layer.feature.properties.editLayerId = i++;
-        layers.push(layer);
-    });
-
-    return (
-        <div>
-            {layers.map((layer, i) => {
-                const { editLayerId } = layer.feature.properties;
-                return (
-                    <EditableLayer
-                        key={i}
-                        layer={layer}
-                        showDrawControl={i === activeSpatialID - 1}
-                        onLayerClicked={() => {
-                            setActiveSpatialID(editLayerId)
-                        }}
-                    >
-                    </EditableLayer >
-                );
-            })}
-            <AddLayer />
-        </div>
-    );
-}
-
-export default function ViaMap2(props) {
-    const { spatials } = useContext(SpatialContext)
-
-    const center = [40.64564461264746, -73.84831527895031]
-
-    return spatials ?
-        (<Map
-            center={center}
-            // center={[spatials.features[0].geometry.coordinates[0][0][1], spatials.features[0].geometry.coordinates[0][0][0]]}
-            zoom={12}>
-            < TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-            />
-            <EditableGroup data={spatials} />
-        </Map >)
-        : (<div className="loader-container">
-            <Loader
-                className="loader"
-                type="Circles"
-                color="#00BFFF"
-                height={200}
-                width={200}
-                timeout={30000} //30 secs
-            />
-        </div>
-        )
 }

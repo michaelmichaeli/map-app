@@ -2,20 +2,25 @@ html {
 	--scrollbarBG: #cfd8dc;
 	--thumbBG: #90a4ae;
 }
-.loader-container {
-	height: 90vh;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
 
 .App {
-	// font-family: "Muli", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
 	font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen",
 		"Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
 		sans-serif;
 	-webkit-font-smoothing: antialiased;
 	overflow: hidden;
+}
+
+.loader-container {
+	height: 90vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 9999;
+	background-color: transparent;
+	.loader {
+		background-color: transparent;
+	}
 }
 
 .leaflet-container {
@@ -34,7 +39,6 @@ html {
 .spatial-list-container::-webkit-scrollbar-thumb {
 	background-color: rgb(126, 126, 126);
 	border-radius: 8px;
-	// border: 1px solid rgba(0, 0, 0, 0.219);
 }
 .spatial-list-container {
 	display: flex;
@@ -46,16 +50,13 @@ html {
 	left: 0;
 	scrollbar-width: thin;
 	scrollbar-color: rgb(95, 95, 95) rgb(216, 216, 216);
-	// display: inline-block;
 	max-height: 80vh;
 	overflow: scroll;
 	overflow-x: hidden;
 	border: 1px solid rgb(184, 184, 184);
-	// border-radius: 6px;
 	padding: 0;
 	margin: 10px;
 	color: rgb(93, 93, 93);
-	// background-color: white;
 	background-color: #fff;
 	box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
 	border-radius: 4px;
@@ -73,8 +74,6 @@ html {
 		a.done {
 			cursor: pointer;
 			padding: 15px 10px 0 0;
-			// margin-right: 15px;
-			// margin: 0;
 			color: lightgreen;
 		}
 	}
@@ -150,13 +149,15 @@ html {
 						margin: 0;
 						font-size: 0.7em;
 					}
-					svg {
-						margin: 3px;
-						padding: 3px;
+					a.delete {
 						width: 24px;
 						height: 24px;
-						border-radius: 100%;
-						background-color: rgba(0, 0, 0, 0.109);
+						margin: 3px;
+						svg {
+							border-radius: 4px;
+							padding: 3px;
+							background-color: rgba(0, 0, 0, 0.109);
+						}
 					}
 					a.delete:hover {
 						color: red;
@@ -177,6 +178,7 @@ html {
 }
 
 // Map-Edit-Tool
+
 .sr-only {
 	display: none;
 }

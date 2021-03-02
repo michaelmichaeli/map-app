@@ -8,17 +8,15 @@ import { SpatialContext } from '../contexts/SpatialContext';
 import { ActiveSpatialContext } from './../contexts/ActiveSpatialContext'
 import { UserMessageContext } from '../contexts/UserMessageContext';
 
-
 export default function SpatialRow({ spatial }) {
 
     const { activeSpatialID, setActiveSpatialID } = useContext(ActiveSpatialContext)
     const { deleteSpatialByID } = useContext(SpatialContext)
     const { setAlertDelete } = useContext(UserMessageContext)
-    
-    
-   
 
-    return <li className={"spatial-row flex-col"} id={spatial.id}
+    return <li
+        className={"spatial-row flex-col"}
+        id={spatial.id}
     >
         <div
             className="row-header flex-row"
@@ -27,7 +25,6 @@ export default function SpatialRow({ spatial }) {
                     setActiveSpatialID(null)
                     :
                     setActiveSpatialID(spatial.id)
-                // console.log('clicked row spatial:', spatial);
             }}
         >
             <p className="id">{spatial.id}</p>
@@ -37,18 +34,18 @@ export default function SpatialRow({ spatial }) {
                 className="find"
                 title="Centralize map at spatial"
             // onClick={()=>setCenter()}
-            >Find</a> */}
+            >FindIcon</a> */}
         </div>
         {spatial.id === activeSpatialID && <div className="row-content">
             <div className="info">
-                <p className="creation-date">Created: 
+                <p className="creation-date">Created:
                     <span>{moment(spatial.creationDate).fromNow()} on {moment(spatial.creationDate).format("dddd, MMMM Do YYYY, h:mm:ss a")}</span>
                 </p>
-                <p className="ElectDist">Electoral District: 
+                <p className="ElectDist">Electoral District:
                     <span>{spatial.properties.ElectDist ? spatial.properties.ElectDist : "No Dist"}</span>
                 </p>
-                <p className="shape-area">Area: 
-                    <span>{spatial.properties.Shape__Area ? spatial.properties.Shape__Area : "No Shape Area"}<span>Sq m</span></span>
+                <p className="shape-area">Area:
+                    <span>{spatial.properties.Shape__Area ? spatial.properties.Shape__Area.toFixed(2) : "No Shape Area"}</span>
                 </p>
                 <p className="comment-title">Comment: </p>
                 <SpatialComment spatial={spatial} />
@@ -68,7 +65,7 @@ export default function SpatialRow({ spatial }) {
                 </a>
             </div>
         </div>}
-        
+
     </li>
 }
 

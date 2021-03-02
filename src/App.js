@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import "./App.scss";
 import SpatialList from "./components/SpatialList";
-import ViaMap2 from "./components/ViaMap2";
+import ViaMap from "./components/ViaMap";
 
 import { SpatialContext } from "./contexts/SpatialContext";
 import UserMessages from "./components/UserMessages";
@@ -11,7 +11,7 @@ function App() {
 	return (
 		<div className="App">
 			<UserMessages />
-			<ViaMap2 />
+			<ViaMap />
 			{spatials && <SpatialList />}
 		</div>
 	);

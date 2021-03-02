@@ -17,13 +17,11 @@ export default function SpatialList() {
     );
 
     useEffect(() => {
-        console.log('activeSpatialID', activeSpatialID);
         if (activeSpatialID) {
-            const scrollIntoViewSmoothly = 
+            const scrollIntoViewSmoothly =
                 'scrollBehavior' in document.documentElement.style
                     ? smoothScrollIntoView
                     : scrollIntoView
-                
             const node = document.getElementById(activeSpatialID)
             scrollIntoViewSmoothly(node, {
                 behavior: 'smooth',
@@ -32,26 +30,27 @@ export default function SpatialList() {
         }
     }, [activeSpatialID])
 
-    return spatials ? (<div className="spatial-list-container">
-        <div className="list-header flex-row flex-space-between">
-            <h3>Spatials:</h3>
-            {activeSpatialID && <a
-                className="done"
-                title="Done"
-                onClick={() => setActiveSpatialID(null)
-                }
-            >
-                <Icon className="done-icon">done</Icon>
-            </a>}
-        </div>
-        <ul>
-            {spatials.features.map((spatial) => {
-                return <SpatialRow
-                    spatial={spatial}
-                    key={spatial.id} />
-            })}
-        </ul>
-        <p className="list-end">----List-End----</p>
-    </div>)
+    return spatials
+        ? (<div className="spatial-list-container">
+            <div className="list-header flex-row flex-space-between">
+                <h3>Spatials:</h3>
+                {activeSpatialID && <a
+                    className="done"
+                    title="Done"
+                    onClick={() => setActiveSpatialID(null)
+                    }
+                >
+                    <Icon className="done-icon">done</Icon>
+                </a>}
+            </div>
+            <ul>
+                {spatials.features.map((spatial) => {
+                    return <SpatialRow
+                        spatial={spatial}
+                        key={spatial.id} />
+                })}
+            </ul>
+            <p className="list-end">----List-End----</p>
+        </div>)
         : null
 }
