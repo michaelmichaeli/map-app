@@ -87,6 +87,13 @@ function EditableLayer(props) {
     let { map } = leaflet;
 
     useEffect(() => {
+        map.on('click', e => {
+            console.log('e', e.latlng);
+            console.log('?', map.hasLayer(e.latlng));
+        })
+    },[map])
+
+    useEffect(() => {
         if (!props.showDrawControl) {
             map.removeControl(drawControlRef.current);
         } else {
@@ -152,6 +159,18 @@ function AddLayer(props) {
     const leaflet = useLeaflet();
     let drawControlRef = React.useRef();
     let { map } = leaflet;
+
+    
+    // const leaflet = useLeaflet();
+
+    // let { map } = leaflet;
+    
+    // useEffect(() => {
+    //     map.on('click', e => {
+    //         console.log('e', e.latlng);
+    //         console.log('?', map.hasLayer(e.latlng));
+    //     })
+    // },[map])
 
     useEffect(() => {
         if (activeSpatialID) {
